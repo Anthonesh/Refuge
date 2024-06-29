@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ReservationForm index{% endblock %}
+
+{% block body %}
+    <h1>ReservationForm index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>Email</th>
+                <th>PhoneNumber</th>
+                <th>StreetNumber</th>
+                <th>StreetName</th>
+                <th>PostalCode</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Reservation</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reservation_form in reservation_forms %}
+            <tr>
+                <td>{{ reservation_form.id }}</td>
+                <td>{{ reservation_form.firstName }}</td>
+                <td>{{ reservation_form.lastName }}</td>
+                <td>{{ reservation_form.email }}</td>
+                <td>{{ reservation_form.phoneNumber }}</td>
+                <td>{{ reservation_form.streetNumber }}</td>
+                <td>{{ reservation_form.streetName }}</td>
+                <td>{{ reservation_form.postalCode }}</td>
+                <td>{{ reservation_form.city }}</td>
+                <td>{{ reservation_form.country }}</td>
+                <td>{{ reservation_form.reservation }}</td>
+                <td>
+                    <a href="{{ path('app_reservation_form_crud_show', {'id': reservation_form.id}) }}">show</a>
+                    <a href="{{ path('app_reservation_form_crud_edit', {'id': reservation_form.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reservation_form_crud_new') }}">Create new</a>
+{% endblock %}
