@@ -33,7 +33,7 @@ class EventPlanningController extends AbstractController
                     'title' => htmlspecialchars($event->getTitle()),
                     'startTime' => $event->getStartTime()->format('Y-m-d H:i:s'),
                     'endTime' => $event->getEndTime()->format('Y-m-d H:i:s'),
-                    'descritpion' => $event->getDescription(),
+                    'description' => $event->getDescription(),
                     'places' => $event->getPlaces(),
                 ];
             }

@@ -31,6 +31,10 @@ class Volunteer
 
     private ?Calendar $calendar = null;
 
+    #[ORM\ManyToOne(inversedBy: 'volunteers')]
+    #[ORM\JoinColumn(name: 'id_user', referencedColumnName: 'id')]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -92,6 +96,18 @@ class Volunteer
     public function setCalendar(?Calendar $calendar): static
     {
         $this->calendar = $calendar;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

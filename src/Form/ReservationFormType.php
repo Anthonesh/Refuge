@@ -6,6 +6,7 @@ use App\Entity\Calendar;
 use App\Entity\ReservationForm;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,9 +25,8 @@ class ReservationFormType extends AbstractType
             ->add('city')
             ->add('country')
             ->add('reservation')
-            ->add('calendar', EntityType::class, [
-                'class' => Calendar::class,
-                'choice_label' => 'title', // or any property of Calendar entity that you want to display
+            ->add('calendar', HiddenType::class, [
+                'mapped' => false,
             ]);
         ;
     }

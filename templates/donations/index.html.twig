@@ -1,20 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DonationsController!{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block title %}Dons{% endblock %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% block javascript %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let boutonContinue = document.querySelector('.continue-to-payment');
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/Antho/Desktop/Refugev2/refugev2/src/Controller/DonationsController.php</code></li>
-        <li>Your template at <code>C:/Users/Antho/Desktop/Refugev2/refugev2/templates/donations/index.html.twig</code></li>
-    </ul>
-</div>
+    if (boutonContinue) {
+        boutonContinue.addEventListener('click', function() {
+            // Stocker les données dans le session storage
+            let montantDon = document.getElementById('montantDon').value;
+            sessionStorage.setItem('montantDon', montantDon);
+            // Rediriger vers la page de paiement
+            window.location.href = '/dons/paiement';
+        });
+    }
+});
+</script>
+{% endblock %}
+
+{% block main %}
+    <h1>Formulaire de dons</h1>
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {{ form_start(form, {'attr': {'id': 'form'}}) }}
+        <h2>Informations du donateur</h2>
+        {{ form_widget(form) }}
+
+    <button type="submit" class="btn btnSave continue-to-payment">Continuer vers le paiement</button>
+    {{ form_end(form) }}
+
 {% endblock %}

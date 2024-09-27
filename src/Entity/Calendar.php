@@ -120,8 +120,11 @@ class Calendar
 
     public function setVolunteerPlaces(?int $volunteer_places): static
     {
-        $this->volunteer_places = $volunteer_places;
-
+        if ($volunteer_places < 0) {
+            throw new \Exception("Le nombre de places disponibles ne peut pas être négatif.");
+        }
+        $this->volunteer_places = $volunteer_places;  // Assurez-vous d'utiliser volunteer_places ici
+    
         return $this;
     }
 
