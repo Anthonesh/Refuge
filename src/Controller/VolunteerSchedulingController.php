@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Volunteer;
+use App\Form\VolunteerEventType;
 use App\Form\VolunteerType;
 use App\Repository\CalendarRepository;
 use App\Repository\ResidentsRepository;
@@ -31,7 +32,7 @@ class VolunteerSchedulingController extends AbstractController
                 'title' => htmlspecialchars($event->getTitle()),
                 'startTime' => $event->getStartTime()->format('Y-m-d H:i:s'),
                 'endTime' => $event->getEndTime()->format('Y-m-d H:i:s'),
-                'descritpion' => $event->getDescription(),
+                'description' => $event->getDescription(),
                 'volunteerPlaces' => $event->getVolunteerPlaces(),
             ];
         }
@@ -55,6 +56,11 @@ class VolunteerSchedulingController extends AbstractController
         // Crée une nouvelle réservation
         $volunteer = new Volunteer();
         $volunteer->setCalendar($calendar);
+        // Si l'utilisateur est connecté, pré-remplissez le formulaire avec ses informations
+        $user = $this->getUser();
+        if ($user) {
+            $volunteer->setUser($user);
+        }
         $form = $this->createForm(VolunteerType::class, $volunteer);
         $form->handleRequest($request);
     

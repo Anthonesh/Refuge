@@ -30,42 +30,37 @@ class ReservationFormCrudController extends AbstractController
         $form = $this->createForm(ReservationFormType::class, $reservationForm);
         $form->handleRequest($request);
     
-        $eventId = $request->query->get('id');
+        $eventId = $request->query->get('eventId');
         if ($eventId) {
-            // Trouvez l'entité Calendrier correspondante
             $calendar = $calendarRepo->find($eventId);
-        
             if ($calendar) {
-                // Associez le calendrier à l'entité Formulaire
                 $reservationForm->setCalendar($calendar);
             } else {
-                // Gérez le cas où le calendrier n'est pas trouvé
                 $this->addFlash('error', 'Calendrier non trouvé.');
-                return $this->redirectToRoute('app_event_planning'); 
+                return $this->redirectToRoute('app_event_planning');
             }
         }
     
         if ($form->isSubmitted() && $form->isValid()) {
-            // Obtenez le nombre de participants du formulaire
-            $reservations = $reservationForm->getReservation();
-            // Obtenez l'événement associé au formulaire
-            $calendar = $reservationForm->getCalendar(); // Obtenez l'événement associé
-            $places = $calendar->getPlaces();
-        
-            if ($places >= $reservations) {
-                // Soustrayez le nombre de participants du nombre de places disponibles
-                $calendar->setPlaces($places - $reservations);
-        
-                $entityManager->persist($reservationForm);
-                $entityManager->persist($calendar);
-                $entityManager->flush();
-                
-                // Redirigez ou affichez un message de succès
-                $this->addFlash('success', 'Votre réservation a été enregistrée avec succès.');
-                return $this->redirectToRoute('app_event_planning');
+            $calendar = $reservationForm->getCalendar();
+            if ($calendar) {
+                $reservations = $reservationForm->getReservation();
+                $places = $calendar->getPlaces();
+    
+                if ($places >= $reservations) {
+                    $calendar->setPlaces($places - $reservations);
+    
+                    $entityManager->persist($reservationForm);
+                    $entityManager->persist($calendar);
+                    $entityManager->flush();
+    
+                    $this->addFlash('success', 'Votre réservation a été enregistrée avec succès.');
+                    return $this->redirectToRoute('app_event_planning');
+                } else {
+                    $this->addFlash('error', 'Il n’y a pas assez de places disponibles pour cette réservation.');
+                }
             } else {
-                // Affichez un message d'erreur si le nombre de places disponibles est insuffisant
-                $this->addFlash('error', 'Il n’y a pas assez de places disponibles pour cette réservation.');
+                $this->addFlash('error', 'Calendrier non associé.');
             }
         }
     
